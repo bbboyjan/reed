@@ -76,7 +76,7 @@ func (c *Conn) readGoroutine() {
 		writeMsg := c.handlerServ.Receive(input.Bytes())
 		if writeMsg != nil {
 			if err := c.Write(writeMsg); err != nil {
-				log.Logger.Errorf("connection.read failed to write:%v", err)
+				log.Logger.Errorf("connection.read failed to write: %v", err)
 			}
 		}
 	}
