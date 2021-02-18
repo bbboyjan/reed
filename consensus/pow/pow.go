@@ -11,9 +11,8 @@ import (
 )
 
 const (
-	diffLimitHex = "000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-	//diffLimitHex   = "00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-	targetTimespan = 14 * 24 * 60 * 60 // two weeks
+	diffLimitHex   = "00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+	targetTimespan = 14 * 24 * 60 * 60 // two weeks(sec)
 	targetSpacing  = 10 * 60
 )
 
@@ -32,6 +31,7 @@ func CheckProofOfWork(target big.Int, hash types.Hash) bool {
 }
 
 //	Calculate a new difficulty
+//	prevEpochBlockTime:prev 2016 block time
 //	b:cur block
 func CalcDifficulty(prevEpochBlockTime uint64, b *types.Block) big.Int {
 	actualTimespan := b.Timestamp - prevEpochBlockTime
@@ -39,8 +39,8 @@ func CalcDifficulty(prevEpochBlockTime uint64, b *types.Block) big.Int {
 	if actualTimespan < targetTimespan/4 {
 		actualTimespan = targetTimespan / 4
 	}
-	if actualTimespan > targetSpacing*4 {
-		actualTimespan = targetSpacing * 4
+	if actualTimespan > targetTimespan*4 {
+		actualTimespan = targetTimespan * 4
 	}
 
 	var newDiff big.Int
@@ -63,6 +63,7 @@ func DifficultyLimit() big.Int {
 	return n
 }
 
+// return 2016
 func DifficultyAdjustmentInterval() uint64 {
 	return targetTimespan / targetSpacing
 }
